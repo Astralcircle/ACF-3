@@ -760,7 +760,7 @@ do -- Movement -----------------------------------------
 			self.InGear = true
 		end
 
-		local BoxPhys = Contraption.GetAncestor(self):GetPhysicsObject()
+		local BoxPhys = self:GetAncestor():GetPhysicsObject()
 		local SelfWorld = BoxPhys:LocalToWorldVector(BoxPhys:GetAngleVelocity())
 		local Gear = self.Gear
 
@@ -884,7 +884,7 @@ do -- Movement -----------------------------------------
 		end
 
 		if ReactTq ~= 0 then
-			local BoxPhys = Contraption.GetAncestor(self):GetPhysicsObject()
+			local BoxPhys = self:GetAncestor():GetPhysicsObject()
 
 			if IsValid(BoxPhys) then
 				BoxPhys:ApplyTorqueCenter(self:GetRight() * Clamp(2 * deg(ReactTq * MassRatio) * DeltaTime, -500000, 500000))
@@ -896,8 +896,6 @@ do -- Movement -----------------------------------------
 end ----------------------------------------------------
 
 do -- Braking ------------------------------------------
-	local Contraption = ACF.Contraption
-
 	local function BrakeWheel(Link, Wheel, Brake)
 		local Phys      = Wheel:GetPhysicsObject()
 		local AntiSpazz = 1
@@ -924,7 +922,7 @@ do -- Braking ------------------------------------------
 		if not next(self.Wheels) then return end -- No brakes for the non-wheel users
 		if self.LastBrake == Clock.CurTime then return end -- Don't run this twice in a tick
 
-		local BoxPhys = Contraption.GetAncestor(self):GetPhysicsObject()
+		local BoxPhys = self:GetAncestor():GetPhysicsObject()
 		local SelfWorld = BoxPhys:LocalToWorldVector(BoxPhys:GetAngleVelocity())
 		local DeltaTime = Clock.DeltaTime
 
@@ -1020,7 +1018,7 @@ do	-- NET SURFER 2.0
 		net.Broadcast()
 	end
 
-	net.Receive("ACF_RequestGearboxInfo",function(_,Ply)
+	net.Receive("ACF_RequestGearboxInfo", function(_, Ply)
 		local Entity = net.ReadEntity()
 
 		if IsValid(Entity) then
@@ -1046,7 +1044,7 @@ do	-- NET SURFER 2.0
 			end
 
 			if next(Entity.GearboxOut) then
-				for E,L in pairs(Entity.GearboxOut) do
+				for E, L in pairs(Entity.GearboxOut) do
 					if L.Side == 0 then
 						OutputL[#OutputL + 1] = E:EntIndex()
 					else
@@ -1056,7 +1054,7 @@ do	-- NET SURFER 2.0
 			end
 
 			if next(Entity.Wheels) then
-				for E,L in pairs(Entity.Wheels) do
+				for E, L in pairs(Entity.Wheels) do
 					if L.Side == 0 then
 						OutputL[#OutputL + 1] = E:EntIndex()
 					else
